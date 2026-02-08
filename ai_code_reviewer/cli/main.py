@@ -1,5 +1,7 @@
 import argparse
 import os
+from ai_code_reviewer.config import load_config
+
 
 def scan_command(path):
     print(f"\nScanning project: {path}\n")
@@ -17,7 +19,7 @@ def scan_command(path):
     print(f"\nTotal Python files: {len(py_files)}")
 
 
-def review_command(file):
+def review_command(file,config):
     print(f"\nReviewing file: {file}\n")
 
     if not os.path.exists(file):
@@ -29,9 +31,12 @@ def review_command(file):
     print(" - Function name not following snake_case")
     print(" - Missing docstring")
 
-    print("\nSeverity:")
-    print(" - 1 Critical")
-    print(" - 2 Warnings")
+    print("\nSeverity Threshold:")
+    print(f" - {config.severity_threshold.capitalize()}")
+
+    print("\nRule thresholds:")
+    print(f" - Max function length: {config.rules.max_function_length}")
+    print(f" - Max cyclomatic complexity: {config.rules.max_cyclomatic_complexity}")
 
 
 def apply_command():
@@ -61,6 +66,8 @@ def diff_command():
 
 
 def main():
+    config = load_config()
+
     parser = argparse.ArgumentParser(description="AI Code Reviewer CLI")
     subparsers = parser.add_subparsers(dest="command")
 
@@ -79,7 +86,7 @@ def main():
     if args.command == "scan":
         scan_command(args.path)
     elif args.command == "review":
-        review_command(args.file)
+        review_command(args.file,config)
     elif args.command == "apply":
         apply_command()
     elif args.command == "report":
