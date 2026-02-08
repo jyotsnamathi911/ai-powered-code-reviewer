@@ -1,0 +1,8 @@
+[tool.ai_code_reviewer]
+severity_threshold = "warning"
+exclude_paths = ["tests/", "venv/"]
+
+[tool.ai_code_reviewer.rules]
+max_function_length = 50
+max_cyclomatic_complexity = 10
+require_type_hints = true
